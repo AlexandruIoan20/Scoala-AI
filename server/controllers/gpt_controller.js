@@ -51,31 +51,28 @@ exports.gpt_create_post = [
     body("photo.*.data") 
         .notEmpty(),
 
-    (req, res, next) => { 
-        upload(req, res, async (err) => { 
-            if(err) console.log(err); 
-            else { 
-                const errors = validationResult(req); 
-                if(!errors.isEmpty()) { 
-                    res.status(403).json({ errors: errors.array() })
-                } else { 
-                    const newGPT = new GPT({ 
-                        title: req.body.title, 
-                        description: req.body.description, 
-                        usability: req.body.usability, 
-                        homeLink: req.body.homeLink, 
-                        apiDocs: req.body.apiDocs, 
-                        imageName: "gptImage", 
-                        photo: { 
-                            data: req.body.data, 
-                            contentType: "jpeg", 
-                        }
-                    }); 
+    async (req, res, next) => { 
+        const errors = validationResult(req); 
+        if(!errors.isEmpty()) { 
+            res.status(403).json({ errors: errors.array() })
+        } else { 
+            const newGPT = new GPT({ 
+                title: req.body.title, 
+                description: req.body.description, 
+                usability: req.body.usability, 
+                homeLink: req.body.homeLink, 
+                apiDocs: req.body.apiDocs, 
+                imageName: "gptImage", 
+            }); 
 
-                    await newGPT.save(); 
-                    res.status(200).json({ gpt: newGPT, message: "GPT added"}); 
-                }
+            if(req.file) { 
+                newGPT.photo = req.file.path; 
             }
-        })
+
+            await newGPT.save(); 
+            console.log(newGPT); 
+            res.status(200).json({ gpt: newGPT, message: "GPT added"}); 
+        }
     }
+
 ]

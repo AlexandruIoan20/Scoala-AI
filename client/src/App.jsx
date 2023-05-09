@@ -7,6 +7,7 @@ import FAQ from './pages/FAQ';
 import ErrorPage from './pages/ErrorPage';
 import GeneralInformations from './pages/GeneralInformations';
 import { Routes, Route } from 'react-router-dom';
+import CreateGPT from './pages/CreateGPT';
 import "./css/navbar.css"; 
 import "./css/main.css"; 
 
@@ -20,6 +21,7 @@ const App = () => {
         <Route path='/' element = { <HomePage /> } />
         <Route path = "/gpts" element = { <GPTs /> } />
         <Route path = "/gpts/:id" element = { <GptDetail /> } />  
+        <Route path = "/gpts/create" element = { <CreateGPT /> } />  
         <Route path = "/general" element = { <GeneralInformations /> } /> 
         <Route path = "/faq" element = { <FAQ /> } /> 
         <Route path = "/*" element = { <ErrorPage /> } /> 

@@ -1,17 +1,18 @@
 const multer = require("multer"); 
+const path = require("path"); 
 
-const Storage = multer.diskStorage({ 
-    destination: "create", 
-    filename: (req, file, cb) => { 
-        cb(null, file.originalname); 
+const storage = multer.diskStorage({ 
+    destination: function(req, file, cb) { 
+        cb(null, 'images/')
+    }, 
+    filename: function(req, file, cb) { 
+        let ext = path.extname(file.originalname); 
+        cb(null, Date.now() + ext); 
     }
 }); 
 
 const upload = multer({ 
-    storage: Storage, 
-}).single('gptImage'); 
+    storage: storage,
+}); 
 
-module.exports = { 
-    Storage, 
-    upload, 
-}
+module.exports = upload;
