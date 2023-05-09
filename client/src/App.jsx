@@ -1,34 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import NavBar from './components/NavBar'; 
+import HomePage from './pages/HomePage';
+import GPTs from './pages/GPTs';
+import GptDetail from './pages/GptDetail';
+import FAQ from './pages/FAQ';
+import ErrorPage from './pages/ErrorPage';
+import GeneralInformations from './pages/GeneralInformations';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => { 
+  return ( 
+    <section className='app'>
+      <NavBar/> 
 
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+      <Routes>
+        <Route path='/' element = { <HomePage /> } />
+        <Route path = "/gpts" element = { <GPTs /> } />
+        <Route path = "/gpts/:id" element = { <GptDetail /> } />  
+        <Route path = "/general" element = { <GeneralInformations /> } /> 
+        <Route path = "/faq" element = { <FAQ /> } /> 
+        <Route path = "/*" element = { <ErrorPage /> } /> 
+      </Routes>
+    </section>
   )
 }
 
