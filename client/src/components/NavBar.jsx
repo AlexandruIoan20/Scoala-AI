@@ -5,12 +5,15 @@ const NavBar = () => {
     return( 
         <nav>
             <h1> AI </h1>
-            <ul>
+            <ul className="navbar-ul">
                 <li>
-                    <NavLink to = '/'> Home </NavLink>
+                    <NavLink to = '/'> Acasa </NavLink>
                 </li>
                 <li>
                     <NavLink to = '/gpts'> GPTs </NavLink>
+                </li>
+                <li>
+                    <NavLink to = '/general'> Informatii </NavLink>
                 </li>
                 <li>
                     <NavLink to = "/faq"> FAQ </NavLink>

@@ -1,0 +1,33 @@
+nav { 
+    display: flex;
+    padding: 1rem;
+    background-color: #1B263B;
+}
+
+nav h1 { 
+    font-size: 1.3rem;
+    color: white;
+}
+
+.navbar-ul { 
+    display: flex;
+    margin-left: auto; 
+    margin-right: 2rem; 
+}
+
+.navbar-ul li { 
+    list-style-type: none;
+} 
+
+.navbar-ul li a { 
+    color: white; 
+    text-decoration: none;
+    font-size: 1.3rem; 
+    padding: 1rem; 
+
+}
+
+.navbar-ul li a:hover, .navbar-ul li a:focus { 
+    background-color: #778DA9;
+    border-radius: 10px;
+}

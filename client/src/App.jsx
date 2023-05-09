@@ -7,6 +7,9 @@ import FAQ from './pages/FAQ';
 import ErrorPage from './pages/ErrorPage';
 import GeneralInformations from './pages/GeneralInformations';
 import { Routes, Route } from 'react-router-dom';
+import "./css/navbar.css"; 
+import "./css/main.css"; 
+
 
 const App = () => { 
   return ( 
