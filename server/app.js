@@ -3,12 +3,31 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const mongoose = require("mongoose"); 
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const apiRouter = require("./routes/api"); 
 
 const app = express();
+
+app.use(function (req, res, next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+  })
+
+
+const mongodb = "mongodb+srv://admin:Husi2015@cluster0.jujegcr.mongodb.net/scoala_ai?retryWrites=true&w=majority"; 
+mongoose.set("strictQuery", false); 
+
+main().catch(err => console.log(err)); 
+async function main ()  {
+  await mongoose.connect(mongodb); 
+  console.log("Connected");
+}
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
