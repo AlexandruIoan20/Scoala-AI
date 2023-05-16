@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import fetchData from "../../helpers/fetchData";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form"; 
 
 const CreateGPT = () => {
@@ -9,7 +8,7 @@ const CreateGPT = () => {
     const [usability, setUsability] = useState(""); 
     const [homeLink, setHomeLink] = useState(""); 
     const [apiDocs, setApiDocs] = useState(""); 
-    const [photo, setPhoto] = useState(""); 
+    const [photo, setPhoto] = useState({}); 
 
     function testState () { 
         const formData =  { 
@@ -31,12 +30,12 @@ const CreateGPT = () => {
             usability, 
             homeLink, 
             apiDocs, 
-            photo: req.file.filename,
+            photo, 
         }; 
 
         try { 
             const req = await fetch("http://localhost:3000/api/gpts/create", { 
-                method: "POST", 
+                method: "post", 
                 mode: "cors", 
                 body: JSON.stringify(formData), 
                 headers: { 
@@ -47,7 +46,6 @@ const CreateGPT = () => {
             if(req.status !== 200){ 
                 return; 
             }
-
 
         } catch (err) { 
             console.log(err); 
@@ -94,7 +92,7 @@ const CreateGPT = () => {
                 </div>
 
                 <div>
-                    <input { ...register("photo") } type="file" onChange = { (e) => {  setPhoto(e.target.value); console.log(e.target.value)} } name = "photo"/>
+                    <input { ...register("photo") } type="file" multiple onChange = { (e) => {  setPhoto(e.target.files) } } name = "photo[]"/>
                 </div>
 
                 <button type = "submit"> Creeaza </button>

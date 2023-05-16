@@ -1,11 +1,10 @@
 const GPT = require("../models/gpt"); 
-const { body, validationResult } = require("express-validator"); 
-const multer = require("multer"); 
-const { Storage, upload } = require("../configs/multer_config"); 
+const upload = require("../middleware/upload_multer"); 
+const fs = require("fs");
 
 exports.gpt_list = async (req, res, next) => { 
     try { 
-        const gpts = await GPT.find().exec(); 
+        const gpts = await GPT.find({}, { title: 1 }).exec(); 
         res.json({ gpts: gpts }); 
     } catch(err) { 
         console.log(err); 
@@ -27,52 +26,33 @@ exports.gpt_create_get = (req, res, next) => {
     res.send("Hello"); 
 }; 
 
-exports.gpt_create_post = [ 
-    body("title", "Title is required")
-        .trim() 
-        .isLength({ min: 1 }) 
-        .escape(),
-    body("description", "Description is required")
-        .trim() 
-        .isLength({ min: 1 }) 
-        .escape(), 
-    body("usability.*", "Usability is required")
-        .trim() 
-        .isLength({ min: 1}) 
-        .escape(), 
-    body("homeLink", "homeLink is required")
-        .trim() 
-        .isLength({ min: 1}) 
-        .escape(), 
-    body("apiDocs", "api is required")
-        .trim() 
-        .isLength({ min: 1}) 
-        .escape(), 
-    body("photo.*.data") 
-        .notEmpty(),
-
-    async (req, res, next) => { 
-        const errors = validationResult(req); 
-        if(!errors.isEmpty()) { 
-            res.status(403).json({ errors: errors.array() })
-        } else { 
+exports.gpt_create_post = (req, res, next) =>{ 
+    upload(req, res, (err) => { 
+        if(err) console.log(err); 
+        else { 
             const newGPT = new GPT({ 
                 title: req.body.title, 
                 description: req.body.description, 
                 usability: req.body.usability, 
                 homeLink: req.body.homeLink, 
                 apiDocs: req.body.apiDocs, 
-                imageName: "gptImage", 
-            }); 
+            });
 
-            if(req.file) { 
-                newGPT.photo = req.file.path; 
+            if (req.files) { 
+                const dataFiles = []; 
+                const files = req.files;
+                files.forEach(file => { 
+                    dataFiles.push(fs.readFileSync(`../uploads/${files[files.indexOf(file)].filename}`)); 
+                }); 
+
+                newGPT.photo = {
+                    data: dataFiles, 
+                    contentType: "image/png", 
+                }; 
             }
-
-            await newGPT.save(); 
-            console.log(newGPT); 
-            res.status(200).json({ gpt: newGPT, message: "GPT added"}); 
+            
+            newGPT.save().then(() => res.send({ gpt: newGPT, message: "Successfully uploaded"}))
+                        .catch(err => console.log(err)); 
         }
-    }
-
-]
+    }); 
+}
